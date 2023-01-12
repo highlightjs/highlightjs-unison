@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Unison syntax highlighting test</title>
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/agate.min.css">
+  </head>
+  <body>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://raw.githubusercontent.com/runarorama/highlightjs-unison/master/dist/unison.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <pre><code>
+{{
+  {type KVStore} is an ability that models a key-value store.
+
+  # Example
+
+  @typecheck```
+  KVStore.modify : (v -> v) -> k ->{KVStore k v} ()
+  KVStore.modify f k = 
+    KVStore.put (f KVStore.get)
+  ```
+
+  ```
+  KVStore.modify (x -> x + 1)
+  ```
+}}
+unique ability KVStore a b where
+  get : a ->{KVStore a b} Optional b
+  put : a -> b ->{KVStore a b} ()
+
+{{ Adds a couple of key-value pairs to the {KVStore} and
+   Reads them back. }}
+myProgram : '{KVStore Nat Nat} Text
+myProgram _ =
+  use KVStore put
+  put 3 4
+  put 5 6
+  maybeFour = KVStore.get 3
+  Optional.map Nat.toText maybeFour
+    |> Optional.getOrElse "nothing here"
+
+{{ An in-memory key-value store that implements the {type KVStore} ability.
+
+   ``inMemory p`` runs the computation ''p'', starting with an empty {type Map}
+   as the store.
+}}
+inMemory : '{g, KVStore a b} r ->{g} r
+inMemory keyValueInteractions =
+  impl : Map a b -> abilities.Request {KVStore a b} r -> r
+  impl map = cases
+    { pure }                          -> pure
+    {KVStore.get key -> resume}       ->
+      handle resume (Map.get key map) with impl map
+    {KVStore.put key value -> resume} ->
+      updatedMap = Map.insert key value map
+      handle !resume with impl updatedMap
+  handle !keyValueInteractions with impl Map.empty
+    </code></pre>
+  </body>
+</html>
