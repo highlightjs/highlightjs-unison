@@ -1,7 +1,4 @@
-# robots.txt - a language grammar for highlight.js
-
-![version](https://badgen.net/npm/v/highlightjs-robots-txt) ![license](https://badgen.net/badge/license/MIT/blue)
-![install size](https://badgen.net/packagephobia/install/highlightjs-robots-txt) ![minified size](https://badgen.net/bundlephobia/min/highlightjs-robots-txt)
+# A Unison language grammar for highlight.js
 
 ## Usage
 
@@ -13,20 +10,11 @@ Simply load the module after loading Highlight.js.  You'll use the minified vers
 
 ```html
 <script type="text/javascript" src="/path/to/highlight.min.js"></script>
-<script type="text/javascript" src="/path/to/robots-txt.min.js"></script>
+<script type="text/javascript" src="/path/to/unison.min.js"></script>
 <script type="text/javascript">
   hljs.highlightAll();
 </script>
 ```
-
-### Using directly from the UNPKG CDN
-
-```html
-<script type="text/javascript"
-  src="https://unpkg.com/highlightjs-robots-txt@0.9.1/dist/robots-txt.min.js"></script>
-```
-
-- More info: <https://unpkg.com>
 
 ### With Node or another build system
 
@@ -34,31 +22,25 @@ If you're using Node / Webpack / Rollup / Browserify, etc, simply require the la
 
 ```javascript
 var hljs = require('highlight.js');
-var hljsRobotsTxt = require('highlightjs-robots-txt');
+var hljsUnison = require('highlightjs-unison');
 
-hljs.registerLanguage("robots-txt", hljsRobotsTxt);
+hljs.registerLanguage("unison", hljsUnison);
 hljs.highlightAll();
 ```
 
 
 ## License
 
-Highlight.js is released under the MIT License. See [LICENSE][1] file
-for details.
+MIT (see the LICENSE file).
 
-### Author
+### Author and maintainer
 
-Thomas LÉVEIL <thomasleveil@gmail.com>
-
-### Maintainer
-
-Josh Goebel <hello@joshgoebel.com>
+Rúnar Bjarnason <runar.bjarnason@unison.cloud>
 
 
 ## Links
 
 - The official site for the Highlight.js library is <https://highlightjs.org/>.
 - The Highlight.js GitHub project: <https://github.com/highlightjs/highlight.js>
-- Learn more about robots.txt: <https://support.google.com/webmasters/answer/6062608?hl=en>
+- The Unison website: <https://unison-lang.org/>
 
-[1]: https://github.com/highlightjs/highlightjs-robots-txt/blob/master/LICENSE

@@ -1,0 +1,52 @@
+-- Structural type
+structural type data.Bag a = MkBag (Map a Nat)
+
+-- Unique type
+unique type Bag a = MkBag (Map a Nat)
+
+-- Function definition
+fib : Nat -> Nat
+fib = 
+  cases
+    0 -> 0
+    1 -> 1
+    n -> fib (n - 1) + fib (n - 2)
+
+-- Text literal
+hello = "Hello, world!"
+
+-- List literal
+xs = [1, 2, 3]
+
+-- Floats
+x = 1.0 * 2.0
+
+-- Integers
+y = +1 * -2
+
+-- Nats
+z = 1 + 2
+
+-- Booleans
+b = true && false || true
+
+-- If expression
+p = if b then 1 else 2
+
+-- Case expression
+q m = match m with
+        0 -> 0
+        1 -> 1
+        n -> fib (n - 1) + fib (n - 2)
+
+-- Character literal
+c = ?a
+
+-- Ability handler
+abilityExample m = 
+  h s = cases
+       {Store.get -> k} -> handle k s with h s
+       {Store.put s -> k} -> handle k () with h s
+       {a} -> a
+  handle !m with h
+
