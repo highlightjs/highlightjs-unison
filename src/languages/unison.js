@@ -47,13 +47,15 @@ export default function(hljs) {
   const CONSTRUCTORCALL = {
     scope: 'title.function.invoke',
     begin: `(${ANYNAME}\\.)*${UPPERNAME}`,
-    relevance: 0
+    relevance: 0,
+    keywords: KEYWORDS
   };
 
   const FUNCTIONCALL = {
     scope: 'title.function.invoke',
     begin: `(${ANYNAME}\\.)*${LOWERNAME}`,
-    relevance: 0
+    relevance: 0,
+    keywords: KEYWORDS
   };
 
   const TYPENAME = {
@@ -67,6 +69,7 @@ export default function(hljs) {
     begin: '\\(',
     end: '\\)',
     illegal: '"',
+    keywords: KEYWORDS,
     contains: [
       TYPENAME,
       hljs.inherit(hljs.TITLE_MODE, { begin: '[_a-z][\\w\']*' }),
@@ -112,7 +115,7 @@ export default function(hljs) {
 
   const USE = {
     scope: 'import',
-    begin: 'use',
+    beginKeywords: 'use',
     contains: [
       TYPENAME,
       TERMNAME,
@@ -215,8 +218,10 @@ export default function(hljs) {
   ITALIC.contains.push(BOLD_WITHOUT_ITALIC);
 
   const LINK = {
-    begin: '{',
-    end: '}',
+    begin: '\\{',
+    end: '\\}',
+    beginScope: 'doctag',
+    endScope: 'doctag',
     subLanguage: 'unison',
     relevance: 5
   };
@@ -261,8 +266,8 @@ export default function(hljs) {
 
   const DOCBLOCK = {
     scope: 'comment',
-    begin: '{{',
-    end: '}}',
+    begin: '\\{\\{',
+    end: '\\}\\}',
     contains: [
       BOLD,
       ITALIC,
@@ -289,8 +294,8 @@ export default function(hljs) {
         relevance: 8
       },
       {
-        begin: '{{',
-        end: '}}',
+        begin: '\\{\\{',
+        end: '\\}\\}',
         subLanguage: 'unison',
         relevance: 10
       },
@@ -324,13 +329,12 @@ export default function(hljs) {
       // hexadecimal literal
       { match: `\\b[+-]?0[xX]_*(${hexDigits})(\\.(${hexDigits}))?` + `([pP][+-]?(${decimalDigits}))?\\b` },
       // octal-literal
-      { match: `\\b[+-]?0[oO](${octalDigits})\\b` },
+      { match: `\\b[+-]?0[oO](${octalDigits})\\b` }
     ]
   };
 
   const EXPRESSION =
     { end: '$',
-      scope: 'expr',
       keywords: KEYWORDS,
       contains: [
       COMMENT,
@@ -381,8 +385,21 @@ export default function(hljs) {
     beginScope: 'title.function',
     end: '=',
     endScope: 'punctuation',
-    contains: [ PARAM ],
+    contains: [PARAM],
     starts: EXPRESSION
+  };
+
+  const WATCH = {
+    begin: /^\w*>/,
+    beginScope: 'meta.prompt',
+    end: /^$/,
+    keywords: KEYWORDS,
+    contains: [
+      TYPESIG,
+      TERMLHS,
+      ...EXPRESSION.contains
+    ],
+    relevance: 5
   };
 
   return {
@@ -446,7 +463,7 @@ export default function(hljs) {
       },
       TYPESIG,
       TERMLHS,
-      DOCBLOCK,
+      WATCH,
       ...EXPRESSION.contains
     ]
   };
